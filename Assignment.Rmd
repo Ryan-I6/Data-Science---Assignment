@@ -5,45 +5,57 @@ date: "16/11/2020"
 output: html_document
 ---
 
-
 # 1. Basics
 
 
-1.1)    B = 5.0 + 10/12 = 5.8333  
+1.1)What is the value of " B " after running these command?  
+B = 5.0 + 10/12 = 5.8333
+
+What type of vector do you get in each of the following?  
+```{r}
+vec_1 <- c(44, 5, 0, "k")
+vec_2 <- c(1, 2, 3, FALSE)
+vec_3 <- c("a", "b", "c", TRUE)
+vec_4 <- c(1, 2, 3, "4")
+```
+
 vec_1 is char   
 vec_2 is num  
 vec_3 is char  
 vec_4 is char
   
   
-1.2.1)    This code will omit all values of NA inside vector c.
+1.2.1)Create a vector vec_1 with no missing values using conditional subsetting and explain your code  
+This code will omit all values of NA inside vector c.
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 vec <- c(141.2741, 141.8392, 140.5730,NA, 141.3571, 139.8689, 
          137.9384, NA,139.6620, 138.2521, 138.8635, 141.3885, NA)
 
-vec_1 <- na.omit(vec)
+new_vec1 <- na.omit(vec)
 
 ```
 
 
-1.2.2) vec_2 will check through all values in the vector and check whether there are missing values(NA). If so it will return their indexes  
+1.2.2)Create a vector of indexes of missing values using conditional subsetting and explain your code  
+vec_2 will check through all values in the vector and check whether there are missing values(NA). If so it will return their indexes  
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 
-vec_2 <- which(!complete.cases(vec))
+new_vec2 <- which(!complete.cases(vec))
 
 
 ```
   
-1.2.3) Code will change Values to true and NA to False then will sum all incomplete cases (false).
+1.2.3) Write a code to determine how many missing values are in vec.  
+Code will change Values to true and NA to False then will sum all incomplete cases (false).
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 
-vec_2 <- (!complete.cases(vec))  
-amt <- sum(vec_2)
+new_vec2 <- (!complete.cases(vec))  
+amt <- sum(new_vec2)
 
 ```
 
   
-1.2.4) 
+1.2.4) Write a R code to create a data frame which contains details of 3 students  
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 
 n <- c("Ryan", "Jody", "Rory")  
@@ -62,16 +74,17 @@ Students <- data.frame(Name= n,
 # 2. Functions in R  
 
 
-2.1) This function will sum all values inside the vector and divide the total by the amount of values present in the vector
+2.1) Create a function which returns a mean of an input vector and explain your code  
+This function will sum all values inside the vector and divide the total by the amount of values present in the vector
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 
 vector <- c(10,20,15,16) 
-Ans <-mean(vector) 
+mean_ans <- mean(vector) 
 
 ```
 
  
-2.2) 
+2.2) Create a function which take no inputs , it reads a Titanic .csv file and returns its content and explain your code.  
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 library(tidyverse)  
 library(readxl)
@@ -83,17 +96,23 @@ readTitanic <- tibble(read.csv("Titanic.csv"))
   
 # 3. Conditionals and Loops
   
-3.1)
+3.1)Write a function that take an input below and returns a transformed vector below into 1 when its element is male and 2 when its female using ifelse
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 
-g <- c("MALE","FEMALE","FEMALE","MALE","FEMALE","MALE","MALE","FEMALE", "MALE","MALE","FEMALE","MALE","MALE","FEMALE","MALE","MALE","MALE")  
-  
-  a <-factor(g, levels = c("MALE","FEMALE"), labels = c(1,2))
+g <- c("MALE","FEMALE","FEMALE","MALE","FEMALE","MALE","MALE","FEMALE", "MALE","MALE","FEMALE","MALE","MALE","FEMALE","MALE","MALE","MALE")
+
+ifelse(g=="MALE",1,2)
+
+#or
+
+g <- c("MALE","FEMALE","FEMALE","MALE","FEMALE","MALE","MALE","FEMALE", "MALE","MALE","FEMALE","MALE","MALE","FEMALE","MALE","MALE","MALE")
+
+a <-factor(g, levels = c("MALE","FEMALE"), labels = c(1,2))
 
 ```
 
     
-3.2.1)
+3.2.1)Use the "cbind " function in R to create one dataset and assign it to df
 ```{r}
 x <- rnorm(1000, 120, 5)
 y <- sample(c("M","F"),size = 1000, replace = TRUE)
@@ -103,7 +122,7 @@ df <- cbind(x,y, deparse.level =1)
 ```
   
   
-3.2.2)
+3.2.2)Convert df from 3.2.1 into a data.frame
 ```{r}
 
 new_df <- data.frame(df)
@@ -111,7 +130,7 @@ new_df <- data.frame(df)
 ```
   
   
-3.2.3)
+3.2.3)Write a code using tidyverse to compute a number of males ("M") and females ("F") in 3.2.1
 ```{r}
 library(tidyverse)
 library(readxl)
@@ -126,7 +145,7 @@ both <- new_df %>% group_by(y) %>% count()
 ```
   
   
-3.2.4)
+3.2.4)Create a bar plot using ggplot to visualize your results in 3.2.3
 ```{r}
 
 library(ggplot2)
@@ -139,11 +158,35 @@ new_df %>% group_by(y) %>% count() %>%
   geom_text(aes(label=n), position = position_stack(vjust=0.5))+
   theme(plot.title=element_text(hjust=0.5))+
   guides(fill=guide_legend(title = "Gender"))
-
 ```
 
-3.2.5)
+3.2.5)Use mutate function to add sum of x per "M" and "F" and plot the results using sum of x per "M" and "F"
 ```{r}
+
+
+
+Mdf <- new_df %>% mutate(Male = ifelse(y=="M",x,0)) %>% mutate(Female = ifelse(y=="F",x, 0))
+
+FemaleTotal <- sum(as.integer(Mdf$Female))
+MaleTotal <- sum(as.integer(Mdf$Male))
+
+
+Genders <-c("Male", "Female")
+totals <- c(MaleTotal,FemaleTotal)
+
+GraphData <- data.frame(Gender=Genders,
+                        Amouts=totals)
+
+GraphData %>% 
+  ggplot(aes(x=Genders,y=totals, fill= as.factor(totals)))+
+    geom_col()+
+  labs(x="Genders", y = "Amout in X", title= "Total X values for Male and Female")+
+  theme(plot.title=element_text(hjust=0.5))+
+  geom_text(aes(label=totals), position = position_stack(vjust=0.5))+
+  guides(fill=guide_legend(title = "Key"))
+
+
+
 
 ```
 
